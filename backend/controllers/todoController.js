@@ -31,44 +31,38 @@ const getTodo = async (req, res) => {
 };
 
 const addTodo = async (req, res) => {
-  const { title, description } = req.body;
+  const { title, description, isCompleted } = req.body;
 
   if (!title || !description) {
-    res.status(400);
-    res.json({
+    return res.status(400).json({
       msg: "Please Fill All Details",
     });
   }
 
   // DB QUERY TO CREATE A DOC IN DB
-  const todo = await Todo.create({ title, description });
+  const todo = await Todo.create({ title, description, isCompleted });
 
   if (!todo) {
-    res.status(400);
-    res.json({
+    return res.status(400).json({
       msg: "Todo Not Created",
     });
   }
-
-  res.status(201);
-  res.json(todo);
+  res.status(201).json(todo);
 };
 
 const updateTodo = async (req, res) => {
   // DB QUERY FOR UPDATE DOCUMENT BY ID
-  const updateTodo = await Todo.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-  });
-  
+  const updateTodo = await Todo.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    { new: true }
+  );
   if (!updateTodo) {
-    res.status(400);
-    res.json({
+    return res.status(400).json({
       msg: "Todo Not Updated",
     });
   }
-
-  res.status(200);
-  res.json(updateTodo);
+  res.status(200).json(updateTodo);
 };
 
 const removeTodo = async (req, res) => {
